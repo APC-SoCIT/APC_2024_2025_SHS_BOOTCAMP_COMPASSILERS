@@ -1,0 +1,419 @@
+FloatLayout:
+    #A floated layout is what makes it possible for our boxlayouts to be in the center, otherwise.
+    #they would on the bottom left corner of the screen, functional but undeniably bad looking.
+    canvas.before:
+        #A canvas.before is a canvas that is drawn before all the other canvases, useful for backgrounds.
+        Rectangle:
+            source:'images/bg.png'
+            #Setting the size of something to root is what makes it possible for the entire
+            #background to take up the entire size of the screen.
+            size: root.width, root.height
+    orientation: "vertical"
+    MainScreenManager:
+        id: screen_manager
+
+    # Persistent navigation bar at the bottom
+    BoxLayout:
+        id: nav_bar
+        size_hint_y: None
+        height: "50dp"
+        spacing: 5
+        opacity: 1 if screen_manager.current != "login" else 0
+        disabled: True if screen_manager.current == "login" else False
+        Button:
+            text: "Goals"
+            on_press: screen_manager.current = "goal"
+        Button:
+            text: "Food Log"
+            on_press: screen_manager.current = "food_log_screen"
+        Button:
+            text: "Daily Intake"
+            on_press: screen_manager.current = "daily_intake_screen"
+        Button:
+            text: "Progress"
+            on_press: screen_manager.current = "progress_screen"
+        Button:
+            text: "Generate"
+            on_press: screen_manager.current = "generate_screen"
+
+<MainScreenManager>:
+    LoginScreen:
+        name: "login"
+    GoalScreen:
+        name: "goal"
+    NewScreen:
+        name: "food_log_screen"
+    DailyIntakeScreenWrapper:
+        name: "daily_intake_screen"
+    ProgressScreenWrapper:
+        name: "progress_screen"
+    GenerateScreenWrapper:
+        name: "generate_screen"
+
+<GoalScreen>:
+    NutritionInputScreen:
+
+<NewScreen>:
+    FoodLogScreen:
+
+<DailyIntakeScreenWrapper>:
+    DailyIntakeScreen:
+
+<ProgressScreenWrapper>:
+    ProgressScreen:
+
+<GenerateScreenWrapper>:
+    GenerateScreen:
+
+#Our nutrition goals input screen.
+<NutritionInputScreen>:
+    #Take over the entire width of the app but only 90% of the height.
+    size_hint: 1, 0.9
+    #Position yourself at the very top of the app.
+    pos_hint: {'top': 1}
+    orientation: "vertical"
+    background_normal: ""
+    padding: 50
+    spacing: 10
+
+    #Box layout containing our Text Inputs.
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                #Greyish Background
+                rgba: (	47/255, 69/255, 80/255, 1)
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                #Rounded all corners.
+                radius: [20,20,20,20]
+
+        #Keep the TextInputs 20 pixels away from the edges of the screen.
+        padding: 20
+        #Keep the TextInputs 10 pixels apart.
+        spacing: 10
+        Label:
+            bold: True
+            text: "Set Your Nutrition Goals"
+        TextInput:
+            id: calories_input
+            hint_text: "Calories"
+            multiline: False
+        TextInput:
+            id: protein_input
+            hint_text: "Protein"
+            multiline: False
+        TextInput:
+            id: calcium_input
+            hint_text: "Calcium"
+            multiline: False
+        TextInput:
+            id: fats_input
+            hint_text: "Fats"
+            multiline: False
+        TextInput:
+            id: trans_fats_input
+            hint_text: "Trans Fats"
+            multiline: False
+        TextInput:
+            id: cholesterol_input
+            hint_text: "Cholesterol"
+            multiline: False
+        TextInput:
+            id: carbohydrates_input
+            hint_text: "Carbohydrates"
+            multiline: False
+        TextInput:
+            id: fiber_input
+            hint_text: "Fiber"
+            multiline: False
+        TextInput:
+            id: iron_input
+            hint_text: "Iron"
+            multiline: False
+        TextInput:
+            id: sodium_input
+            hint_text: "Sodium"
+            multiline: False
+        RoundedButton:
+            text: "Save Goals"
+            on_press: root.save_data()
+
+<FoodLogScreen>:
+    #Take over the entire width of the app but only 90% of the height.
+    size_hint: 1, 0.9
+    #Position yourself at the very top of the app.
+    pos_hint: {'top': 1}
+    orientation: "vertical"
+    background_normal: ""
+    padding: 50
+    spacing: 10
+
+    #Box layout containing our Text Inputs.
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                #Greyish Background
+                rgba: (	47/255, 69/255, 80/255, 1)
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                #Rounded all corners.
+                radius: [20,20,20,20]
+
+        #Keep the TextInputs 20 pixels away from the edges of the screen.
+        padding: 20
+        #Keep the TextInputs 10 pixels apart.
+        spacing: 10
+        BoxLayout:
+            orientation: "vertical"
+            spacing: 10
+            Label:
+                text: "Log a Food Item"
+                bold: True
+            TextInput:
+                id: food_name_input
+                hint_text: "Food Name"
+                multiline: False
+            TextInput:
+                id: food_calories_input
+                hint_text: "Calories"
+            TextInput:
+                id: food_protein_input
+                hint_text: "Protein"
+            TextInput:
+                id: food_calcium_input
+                hint_text: "Calcium"
+            TextInput:
+                id: food_fats_input
+                hint_text: "Fats"
+            TextInput:
+                id: food_trans_fats_input
+                hint_text: "Trans Fats"
+            TextInput:
+                id: food_cholesterol_input
+                hint_text: "Cholesterol"
+            TextInput:
+                id: food_carbohydrates_input
+                hint_text: "Carbohydrates"
+            TextInput:
+                id: food_fiber_input
+                hint_text: "Fiber"
+            TextInput:
+                id: food_iron_input
+                hint_text: "Iron"
+            TextInput:
+                id: food_sodium_input
+                hint_text: "Sodium"
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "40dp"
+                spacing: 10
+                RoundedButton:
+                    text: "Log Food"
+                    on_press: root.log_food()
+                RoundedButton:
+                    text: "Browse Food Database"
+                    on_release: root.show_food_database()
+            RoundedButton:
+                text: "Logged Food"
+                size_hint_y: None
+                height: 50
+                on_release: root.show_logged_foods()
+
+<DailyIntakeScreen>:
+    #Take over the entire width of the app but only 90% of the height.
+    size_hint: 1, 0.9
+    #Position yourself at the very top of the app.
+    pos_hint: {'top': 1}
+    orientation: "vertical"
+    background_normal: ""
+    padding: 50
+    spacing: 10
+
+    #Box layout containing our Text Inputs.
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                #Greyish Background
+                rgba: (	47/255, 69/255, 80/255, 1)
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                #Rounded all corners.
+                radius: [20,20,20,20]
+
+        #Keep the TextInputs 20 pixels away from the edges of the screen.
+        padding: 20
+        #Keep the TextInputs 10 pixels apart.
+        spacing: 10
+
+        Label:
+            text: "Add Food to Today's Intake"
+            bold: True
+            size_hint_y: None
+            height: "40dp"
+
+        Spinner:
+            id: food_spinner
+            text: "Select food"
+            values: root.food_options
+            size_hint_y: None
+            height: "40dp"
+
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: "40dp"
+            spacing: 5
+            cols:4
+
+            RoundedButton:
+                text: "Add Food"
+                on_press: root.add_consumed_food()
+
+            RoundedButton:
+                text: "Refresh Foods"
+                on_press: root.refresh_food_options()
+
+            RoundedButton:
+                text: "View Progress"
+                on_press: app.root.ids.screen_manager.current = "progress_screen"
+
+            RoundedButton:
+                text: "Today's Intake"
+                on_release: root.show_todays_intake()
+
+<ProgressScreen>:
+    #Take over the entire width of the app but only 90% of the height.
+    size_hint: 1, 0.9
+    #Position yourself at the very top of the app.
+    pos_hint: {'top': 1}
+    orientation: "vertical"
+    background_normal: ""
+    padding: 50
+    spacing: 10
+
+    #Box layout containing our Text Inputs.
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                #Greyish Background
+                rgba: (	47/255, 69/255, 80/255, 1)
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                #Rounded all corners.
+                radius: [20,20,20,20]
+
+        #Keep the TextInputs 20 pixels away from the edges of the screen.
+        padding: 20
+        #Keep the TextInputs 10 pixels apart.
+        spacing: 10
+        BoxLayout:
+            orientation: "vertical"
+            spacing: 10
+            Label:
+                text: "Your Progress"
+                bold: True
+                size_hint_y: None
+                height: "40dp"
+            Label:
+                text: root.progress_text
+                text_size: self.width, None
+                size_hint_y: 1
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "40dp"
+                spacing: 10
+                RoundedButton:
+                    text: "Update Progress"
+                    on_press: root.update_progress()
+
+<GenerateScreen>:
+    #Take over the entire width of the app but only 90% of the height.
+    size_hint: 1, 0.9
+    #Position yourself at the very top of the app.
+    pos_hint: {'top': 1}
+    orientation: "vertical"
+    background_normal: ""
+    padding: 50
+    spacing: 10
+
+    #Box layout containing our Text Inputs.
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                #Greyish Background
+                rgba: (	47/255, 69/255, 80/255, 1)
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                #Rounded all corners.
+                radius: [20,20,20,20]
+
+        #Keep the TextInputs 20 pixels away from the edges of the screen.
+        padding: 20
+        #Keep the TextInputs 10 pixels apart.
+        spacing: 10
+        RoundedButton:
+            text: "Generate"
+            size_hint_y: None
+            height: 50
+            on_release: root.generate_meal_plan()
+        ScrollView:
+            Label:
+                id: meal_plan_label
+                text: root.meal_plan_text
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]
+
+<LoginScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 40
+        spacing: 20
+        Label:
+            text: "Welcome to Nutri-Gauge"
+            font_size: 32
+        TextInput:
+            id: login_username
+            hint_text: "Username"
+            multiline: False
+        TextInput:
+            id: login_password
+            hint_text: "Password"
+            password: True
+            multiline: False
+        BoxLayout:
+            size_hint_y: None
+            height: 50
+            spacing: 10
+            Button:
+                text: "Log In"
+                on_release: root.login()
+            Button:
+                text: "Sign Up"
+                on_release: root.signup()
+
+#A rounded button, it is said that all rounded buttons inherit from this one. Indeed, their unique
+#roundedness and their colors are inherited from here, Diba Brendan? Tignan mo, kahit si Brendan naniniwala
+#sa akin, bakit ikaw hindi?
+<RoundedButton@Button>:
+    background_color: (0,0,0,0)
+    background_normal: ''
+    canvas.before:
+        Color:
+            rgba:(255/255, 77/255, 1/255,1)
+        RoundedRectangle: 
+            size: self.size
+            pos: self.pos
+            radius:[20,20,20,20]
