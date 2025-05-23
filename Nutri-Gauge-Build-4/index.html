@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Manager</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        input, button { margin: 5px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Food Manager</h1>
+    <form id="addFoodForm" action="/add_food" method="POST">
+        <input type="text" name="name" placeholder="Food Name" required>
+        <input type="number" name="calories" placeholder="Calories" required>
+        <input type="number" name="protein" placeholder="Protein" required>
+        <input type="number" name="calcium" placeholder="Calcium" required>
+        <input type="number" name="fats" placeholder="Fats" required>
+        <input type="number" name="trans_fats" placeholder="Trans Fats" required>
+        <input type="number" name="cholesterol" placeholder="Cholesterol" required>
+        <input type="number" name="carbohydrates" placeholder="Carbohydrates" required>
+        <input type="number" name="fiber" placeholder="Fiber" required>
+        <input type="number" name="iron" placeholder="Iron" required>
+        <input type="number" name="sodium" placeholder="Sodium" required>
+        <button type="submit">Add Food</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Calories</th>
+                <th>Protein</th>
+                <th>Calcium</th>
+                <th>Fats</th>
+                <th>Trans Fats</th>
+                <th>Cholesterol</th>
+                <th>Carbohydrates</th>
+                <th>Fiber</th>
+                <th>Iron</th>
+                <th>Sodium</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="foodTable"></tbody>
+    </table>
+    <script>
+        const apiUrl = "http://localhost:5000/foods";
+
+
+        async function loadFoods() {
+            const response = await fetch(apiUrl);
+            const foods = await response.json();
+            const table = document.getElementById("foodTable");
+            table.innerHTML = "";
+            Object.keys(foods).forEach(key => {
+                const food = foods[key];
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${food.name}</td>
+                    <td>${food.calories}</td>
+                    <td>${food.protein}</td>
+                    <td>${food.calcium}</td>
+                    <td>${food.fats}</td>
+                    <td>${food.trans_fats}</td>
+                    <td>${food.cholesterol}</td>
+                    <td>${food.carbohydrates}</td>
+                    <td>${food.fiber}</td>
+                    <td>${food.iron}</td>
+                    <td>${food.sodium}</td>
+                    <td><button onclick="deleteFood('${food.name}')">Delete</button></td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+
+        async function addFood(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const foodData = Object.fromEntries(formData.entries());
+
+
+            await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(foodData)
+            });
+            document.getElementById("addFoodForm").reset();
+            loadFoods();
+        }
+
+
+        async function deleteFood(name) {
+            await fetch(`${apiUrl}/${name}`, { method: "DELETE" });
+            loadFoods();
+        }
+
+
+        document.getElementById("addFoodForm").addEventListener("submit", addFood);
+        loadFoods();
+    </script>
+</body>
+</html>
