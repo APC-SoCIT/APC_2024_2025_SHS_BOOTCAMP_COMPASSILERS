@@ -1,0 +1,199 @@
+<MainScreenManager>:
+	GoalScreen:
+    	name: "goal"
+	NewScreen:
+    	name: "foodlog"
+	DailyIntakeScreenWrapper:
+    	name: "dailyintake"
+	ProgressScreenWrapper:
+    	name: "progress"
+
+<GoalScreen>:
+	NutritionInputScreen:
+
+<NewScreen>:
+	FoodLogScreen:
+
+<DailyIntakeScreenWrapper>:
+	DailyIntakeScreen:
+
+<ProgressScreenWrapper>:
+	ProgressScreen:
+
+<NutritionInputScreen>:
+	orientation: "vertical"
+	padding: 10
+	spacing: 10
+	BoxLayout:
+    	orientation: "vertical"
+    	spacing: 10
+    	Label:
+        	text: "Set Your Nutrition Goals"
+    	TextInput:
+        	id: calories_input
+        	hint_text: "Calories"
+    	TextInput:
+        	id: protein_input
+        	hint_text: "Protein"
+    	TextInput:
+        	id: calcium_input
+        	hint_text: "Calcium"
+    	TextInput:
+        	id: fats_input
+        	hint_text: "Fats"
+    	TextInput:
+        	id: trans_fats_input
+        	hint_text: "Trans Fats"
+    	TextInput:
+        	id: cholesterol_input
+        	hint_text: "Cholesterol"
+    	TextInput:
+        	id: carbohydrates_input
+        	hint_text: "Carbohydrates"
+    	TextInput:
+        	id: fiber_input
+        	hint_text: "Fiber"
+    	TextInput:
+        	id: iron_input
+        	hint_text: "Iron"
+    	TextInput:
+        	id: sodium_input
+        	hint_text: "Sodium"
+    	Button:
+        	text: "Save Goals"
+        	on_press: root.save_data()
+    	Button:
+        	text: "Go to Food Log"
+        	on_press: app.root.current = "foodlog"
+
+<FoodLogScreen>:
+	orientation: "vertical"
+	padding: 10
+	spacing: 10
+	BoxLayout:
+    	orientation: "vertical"
+    	spacing: 10
+    	Label:
+        	text: "Log a Food Item"
+    	TextInput:
+        	id: food_name_input
+        	hint_text: "Food Name"
+    	TextInput:
+        	id: food_calories_input
+        	hint_text: "Calories"
+    	TextInput:
+        	id: food_protein_input
+        	hint_text: "Protein"
+    	TextInput:
+        	id: food_calcium_input
+        	hint_text: "Calcium"
+    	TextInput:
+        	id: food_fats_input
+        	hint_text: "Fats"
+    	TextInput:
+        	id: food_trans_fats_input
+        	hint_text: "Trans Fats"
+    	TextInput:
+        	id: food_cholesterol_input
+        	hint_text: "Cholesterol"
+    	TextInput:
+        	id: food_carbohydrates_input
+        	hint_text: "Carbohydrates"
+    	TextInput:
+        	id: food_fiber_input
+        	hint_text: "Fiber"
+    	TextInput:
+        	id: food_iron_input
+        	hint_text: "Iron"
+    	TextInput:
+        	id: food_sodium_input
+        	hint_text: "Sodium"
+    	BoxLayout:
+        	orientation: "horizontal"
+        	size_hint_y: None
+        	height: "40dp"
+        	spacing: 10
+        	Button:
+            	text: "Back to Goals"
+            	on_press: app.root.current = "goal"
+        	Button:
+            	text: "Log Food"
+            	on_press: root.log_food()
+        	Button:
+            	text: "Go to Daily Intake"
+            	on_press: app.root.current = "dailyintake"
+
+<DailyIntakeScreen>:
+	orientation: "vertical"
+	padding: 20
+	spacing: 10
+
+	Label:
+    	text: "Add Food to Today's Intake"
+    	size_hint_y: None
+    	height: "40dp"
+
+	Spinner:
+    	id: food_spinner
+    	text: "Select food"
+    	values: root.food_options
+    	size_hint_y: None
+    	height: "40dp"
+
+	BoxLayout:
+    	orientation: "horizontal"
+    	size_hint_y: None
+    	height: "40dp"
+    	spacing: 10
+
+    	Button:
+        	text: "Back to Food Log"
+        	on_press: app.root.current = "foodlog"
+
+    	Button:
+        	text: "Add Food"
+        	on_press: root.add_consumed_food()
+
+    	Button:
+        	text: "Refresh Foods"
+        	on_press: root.refresh_food_options()
+
+	BoxLayout:
+    	orientation: "horizontal"
+    	size_hint_y: None
+    	height: "40dp"
+    	spacing: 10
+
+    	Button:
+        	text: "View Progress"
+        	on_press: app.root.current = "progress"
+
+<ProgressScreen>:
+	orientation: "vertical"
+	padding: 10
+	spacing: 10
+	BoxLayout:
+    	orientation: "vertical"
+    	spacing: 10
+    	Label:
+        	text: "Your Progress"
+        	size_hint_y: None
+        	height: "40dp"
+    	Label:
+        	text: root.progress_text
+        	text_size: self.width, None
+        	size_hint_y: 1
+    	BoxLayout:
+        	orientation: "horizontal"
+        	size_hint_y: None
+        	height: "40dp"
+        	spacing: 10
+        	Button:
+            	text: "Back to Daily Intake"
+            	on_press: app.root.current = "dailyintake"
+        	Button:
+            	text: "Update Progress"
+            	on_press: root.update_progress()
+        	Button:
+            	text: "Back to Goals"
+            	on_press: app.root.current = "goal"
