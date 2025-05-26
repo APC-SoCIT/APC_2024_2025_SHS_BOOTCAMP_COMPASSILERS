@@ -350,7 +350,7 @@ class LoginScreen(Screen):
         if store.exists(f"user_{username}"):
             user = store.get(f"user_{username}")
             if user.get("password") == password:
-                self.manager.current = "goal"  # Change to your main screen name
+                self.manager.current = "goal"  
             else:
                 Popup(title="Error", content=Label(text="Incorrect password."), size_hint=(0.7, 0.3)).open()
         else:
