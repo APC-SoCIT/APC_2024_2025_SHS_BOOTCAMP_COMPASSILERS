@@ -41,8 +41,8 @@ class FoodLogScreen(BoxLayout):
         food_name = self.ids.food_name_input.text
         data = {
             "name": food_name,
-            "serving_size": self.ids.food_serving_size_input.text,  # <-- Add this line
-            "calories": self.ids.food_calories_input.text,
+            "serving_size": self.ids.food_serving_size_input.text,  # From Kyle
+            "calories": self.ids.food_calories_input.text, 
             "protein": self.ids.food_protein_input.text,
             "calcium": self.ids.food_calcium_input.text,
             "fats": self.ids.food_fats_input.text,
@@ -59,7 +59,7 @@ class FoodLogScreen(BoxLayout):
             if f"food_{key}_input" in self.ids:
                 self.ids[f"food_{key}_input"].text = ""
         self.ids.food_name_input.text = ""
-        self.ids.food_serving_size_input.text = ""  # <-- Add this line
+        self.ids.food_serving_size_input.text = ""  # From Kyle
         self.ids.food_calories_input.text = ""
         self.ids.food_protein_input.text = ""
         self.ids.food_calcium_input.text = ""
