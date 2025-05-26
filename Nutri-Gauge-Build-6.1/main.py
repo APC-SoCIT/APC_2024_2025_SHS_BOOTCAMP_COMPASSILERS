@@ -101,7 +101,6 @@ class FoodLogScreen(BoxLayout):
             if key != "serving_size":
                 layout.add_widget(Label(text=f"{key.capitalize()}: {value}"))
         add_btn = Button(text="Add to My Foods", size_hint_y=None, height=50)
-        # Define popup before using it in lambda
         popup = Popup(title=f"{food.get('name', 'Food Details')}", content=layout, size_hint=(0.8, 0.8))
         add_btn.bind(on_release=lambda btn: self.add_food_from_db_and_close(food, popup))
         layout.add_widget(add_btn)
