@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Manager</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Food Manager</h1>
+        <form id="addFoodForm" action="/add_food" method="POST">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">Food Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="serving_size">Serving Size</label>
+                    <input type="text" id="serving_size" name="serving_size" required>
+                </div>
+                <div class="form-group">
+                    <label for="calories">Calories</label>
+                    <input type="number" id="calories" name="calories" required>
+                </div>
+                <div class="form-group">
+                    <label for="total_fats">Total Fats (g)</label>
+                    <input type="number" step="0.01" id="total_fats" name="total_fats" required>
+                </div>
+                <div class="form-group">
+                    <label for="saturated_fats">Saturated Fats (g)</label>
+                    <input type="number" step="0.01" id="saturated_fats" name="saturated_fats" required>
+                </div>
+                <div class="form-group">
+                    <label for="protein">Protein (g)</label>
+                    <input type="number" step="0.01" id="protein" name="protein" required>
+                </div>
+                <div class="form-group">
+                    <label for="carbohydrates">Carbohydrates (g)</label>
+                    <input type="number" step="0.01" id="carbohydrates" name="carbohydrates" required>
+                </div>
+                <div class="form-group">
+                    <label for="sugar">Sugar (g)</label>
+                    <input type="number" step="0.01" id="sugar" name="sugar" required>
+                </div>
+                <div class="form-group">
+                    <label for="fiber">Fiber (g)</label>
+                    <input type="number" step="0.01" id="fiber" name="fiber" required>
+                </div>
+                <div class="form-group">
+                    <label for="trans_fats">Trans Fats (g)</label>
+                    <input type="number" step="0.01" id="trans_fats" name="trans_fats" required>
+                </div>
+                <div class="form-group">
+                    <label for="cholesterol">Cholesterol (mg)</label>
+                    <input type="number" step="0.01" id="cholesterol" name="cholesterol" required>
+                </div>
+                <div class="form-group">
+                    <label for="calcium">Calcium (mg)</label>
+                    <input type="number" step="0.01" id="calcium" name="calcium" required>
+                </div>
+                <div class="form-group">
+                    <label for="iron">Iron (mg)</label>
+                    <input type="number" step="0.01" id="iron" name="iron" required>
+                </div>
+                <div class="form-group">
+                    <label for="sodium">Sodium (mg)</label>
+                    <input type="number" step="0.01" id="sodium" name="sodium" required>
+                </div>
+            </div>
+            <button type="submit">Add Food</button>
+        </form>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Serving Size</th>
+                        <th>Calories</th>
+                        <th>Total Fats</th>
+                        <th>Saturated Fats</th>
+                        <th>Protein</th>
+                        <th>Carbohydrates</th>
+                        <th>Sugar</th>
+                        <th>Fiber</th>
+                        <th>Trans Fats</th>
+                        <th>Cholesterol</th>
+                        <th>Calcium</th>
+                        <th>Iron</th>
+                        <th>Sodium</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="foodTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = "http://localhost:5000/foods";
+
+        async function loadFoods() {
+            const response = await fetch(apiUrl);
+            const foods = await response.json();
+            const table = document.getElementById("foodTable");
+            table.innerHTML = "";
+            Object.keys(foods).forEach(key => {
+                const food = foods[key];
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${food.name}</td>
+                    <td>${food.serving_size || ""}</td>
+                    <td>${food.calories}</td>
+                    <td>${food.total_fats || "0"}</td>
+                    <td>${food.saturated_fats || "0"}</td>
+                    <td>${food.protein || "0"}</td>
+                    <td>${food.carbohydrates || "0"}</td>
+                    <td>${food.sugar || "0"}</td>
+                    <td>${food.fiber || "0"}</td>
+                    <td>${food.trans_fats || "0"}</td>
+                    <td>${food.cholesterol || "0"}</td>
+                    <td>${food.calcium || "0"}</td>
+                    <td>${food.iron || "0"}</td>
+                    <td>${food.sodium || "0"}</td>
+                    <td><button class="delete-btn" onclick="deleteFood('${food.name}')">Delete</button></td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        async function addFood(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const foodData = Object.fromEntries(formData.entries());
+
+            await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(foodData)
+            });
+            document.getElementById("addFoodForm").reset();
+            loadFoods();
+        }
+
+        async function deleteFood(name) {
+            await fetch(`${apiUrl}/${name}`, { method: "DELETE" });
+            loadFoods();
+        }
+
+        document.getElementById("addFoodForm").addEventListener("submit", addFood);
+        loadFoods();
+    </script>
+</body>
+</html>
