@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Manager</title>
+    <link rel="stylesheet" href="style.css">
+<body>
+    <div class="container">
+        <h1>Nutri<span class="orange-text">Gauge</span> <img src="images/blue_nutri_logo.png" alt="NutriGauge Logo" class="header-logo"> Food Database</h1>
+        <form id="addFoodForm" action="/add_food" method="POST">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">Food Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter food name" required>
+                </div>
+                <div class="form-group">
+                    <label for="serving_size">Serving Size</label>
+                    <input type="text" id="serving_size" name="serving_size" placeholder="e.g., 100g or 1 cup" required>
+                </div>
+                <div class="form-group">
+                    <label for="calories">Calories(kCal)</label>
+                    <input type="number" id="calories" name="calories" placeholder="Enter calories" required>
+                </div>
+                <div class="form-group">
+                    <label for="total_fats">Total Fats (g)</label>
+                    <input type="number" step="0.01" id="total_fats" name="total_fats" placeholder="Enter total fats" required>
+                </div>
+                <div class="form-group">
+                    <label for="saturated_fats">Saturated Fats (g)</label>
+                    <input type="number" step="0.01" id="saturated_fats" name="saturated_fats" placeholder="Enter saturated fats" required>
+                </div>
+                <div class="form-group">
+                    <label for="protein">Protein (g)</label>
+                    <input type="number" step="0.01" id="protein" name="protein" placeholder="Enter protein content" required>
+                </div>
+                <div class="form-group">
+                    <label for="carbohydrates">Carbohydrates (g)</label>
+                    <input type="number" step="0.01" id="carbohydrates" name="carbohydrates" placeholder="Enter carbohydrates" required>
+                </div>
+                <div class="form-group">
+                    <label for="sugar">Sugar (g)</label>
+                    <input type="number" step="0.01" id="sugar" name="sugar" placeholder="Enter sugar content" required>
+                </div>
+                <div class="form-group">
+                    <label for="fiber">Fiber (g)</label>
+                    <input type="number" step="0.01" id="fiber" name="fiber" placeholder="Enter fiber content" required>
+                </div>
+                <div class="form-group">
+                    <label for="trans_fats">Trans Fats (g)</label>
+                    <input type="number" step="0.01" id="trans_fats" name="trans_fats" placeholder="Enter trans fats" required>
+                </div>
+                <div class="form-group">
+                    <label for="cholesterol">Cholesterol (mg)</label>
+                    <input type="number" step="0.01" id="cholesterol" name="cholesterol" placeholder="Enter cholesterol" required>
+                </div>
+                <div class="form-group">
+                    <label for="calcium">Calcium (mg)</label>
+                    <input type="number" step="0.01" id="calcium" name="calcium" placeholder="Enter calcium content" required>
+                </div>
+                <div class="form-group">
+                    <label for="iron">Iron (mg)</label>
+                    <input type="number" step="0.01" id="iron" name="iron" placeholder="Enter iron content" required>
+                </div>
+                <div class="form-group">
+                    <label for="sodium">Sodium (mg)</label>
+                    <input type="number" step="0.01" id="sodium" name="sodium" placeholder="Enter sodium content" required>
+                </div>
+                <div class="form-group">
+                    <label for="food_image">Food Image</label>
+                    <input type="file" id="food_image" name="food_image" accept="image/*">
+                </div>
+                <div class="form-group button-group">
+                    <label>&nbsp;</label>
+                    <button type="submit">Add Food</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Serving Size</th>
+                        <th>Calories</th>
+                        <th>Total Fats</th>
+                        <th>Saturated Fats</th>
+                        <th>Protein</th>
+                        <th>Carbohydrates</th>
+                        <th>Sugar</th>
+                        <th>Fiber</th>
+                        <th>Trans Fats</th>
+                        <th>Cholesterol</th>
+                        <th>Calcium</th>
+                        <th>Iron</th>
+                        <th>Sodium</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="foodTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = "http://localhost:5000/foods";
+
+        async function loadFoods() {
+            const response = await fetch(apiUrl);
+            const foods = await response.json();
+            const table = document.getElementById("foodTable");
+            table.innerHTML = "";
+            Object.keys(foods).forEach(key => {
+                const food = foods[key];
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>
+                        ${food.image ? 
+                            `<img src="/uploads/${food.image}" alt="${food.name}" style="width: 50px; height: 50px; object-fit: cover;">` 
+                            : 'No image'}
+                    </td>
+                    <td>${food.name}</td>
+                    <td>${food.serving_size || ""}</td>
+                    <td>${food.calories}</td>
+                    <td>${food.total_fats || "0"}</td>
+                    <td>${food.saturated_fats || "0"}</td>
+                    <td>${food.protein || "0"}</td>
+                    <td>${food.carbohydrates || "0"}</td>
+                    <td>${food.sugar || "0"}</td>
+                    <td>${food.fiber || "0"}</td>
+                    <td>${food.trans_fats || "0"}</td>
+                    <td>${food.cholesterol || "0"}</td>
+                    <td>${food.calcium || "0"}</td>
+                    <td>${food.iron || "0"}</td>
+                    <td>${food.sodium || "0"}</td>
+                    <td><button class="delete-btn" onclick="deleteFood('${food.name}')">Delete</button></td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        async function addFood(event) {
+            event.preventDefault();
+            try {
+                const formData = new FormData(event.target);
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to add food');
+                }
+
+                document.getElementById("addFoodForm").reset();
+                await loadFoods();
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message);
+            }
+        }
+
+        async function deleteFood(name) {
+            await fetch(`${apiUrl}/${name}`, { method: "DELETE" });
+            loadFoods();
+        }
+
+        document.getElementById("addFoodForm").addEventListener("submit", addFood);
+        loadFoods();
+    </script>
+</body>
+</html>
