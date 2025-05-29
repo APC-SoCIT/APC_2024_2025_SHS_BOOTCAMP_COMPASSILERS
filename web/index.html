@@ -7,73 +7,81 @@
     <link rel="stylesheet" href="style.css">
 <body>
     <div class="container">
-        <h1>Nutri<span class="orange-text">Gauge</span> Food Database</h1>
+        <h1>Nutri<span class="orange-text">Gauge</span> <img src="images/blue_nutri_logo.png" alt="NutriGauge Logo" class="header-logo"> Food Database</h1>
         <form id="addFoodForm" action="/add_food" method="POST">
             <div class="form-grid">
                 <div class="form-group">
                     <label for="name">Food Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" placeholder="Enter food name" required>
                 </div>
                 <div class="form-group">
                     <label for="serving_size">Serving Size</label>
-                    <input type="text" id="serving_size" name="serving_size" required>
+                    <input type="text" id="serving_size" name="serving_size" placeholder="e.g., 100g or 1 cup" required>
                 </div>
                 <div class="form-group">
-                    <label for="calories">Calories</label>
-                    <input type="number" id="calories" name="calories" required>
+                    <label for="calories">Calories(kCal)</label>
+                    <input type="number" id="calories" name="calories" placeholder="Enter calories" required>
                 </div>
                 <div class="form-group">
                     <label for="total_fats">Total Fats (g)</label>
-                    <input type="number" step="0.01" id="total_fats" name="total_fats" required>
+                    <input type="number" step="0.01" id="total_fats" name="total_fats" placeholder="Enter total fats" required>
                 </div>
                 <div class="form-group">
                     <label for="saturated_fats">Saturated Fats (g)</label>
-                    <input type="number" step="0.01" id="saturated_fats" name="saturated_fats" required>
+                    <input type="number" step="0.01" id="saturated_fats" name="saturated_fats" placeholder="Enter saturated fats" required>
                 </div>
                 <div class="form-group">
                     <label for="protein">Protein (g)</label>
-                    <input type="number" step="0.01" id="protein" name="protein" required>
+                    <input type="number" step="0.01" id="protein" name="protein" placeholder="Enter protein content" required>
                 </div>
                 <div class="form-group">
                     <label for="carbohydrates">Carbohydrates (g)</label>
-                    <input type="number" step="0.01" id="carbohydrates" name="carbohydrates" required>
+                    <input type="number" step="0.01" id="carbohydrates" name="carbohydrates" placeholder="Enter carbohydrates" required>
                 </div>
                 <div class="form-group">
                     <label for="sugar">Sugar (g)</label>
-                    <input type="number" step="0.01" id="sugar" name="sugar" required>
+                    <input type="number" step="0.01" id="sugar" name="sugar" placeholder="Enter sugar content" required>
                 </div>
                 <div class="form-group">
                     <label for="fiber">Fiber (g)</label>
-                    <input type="number" step="0.01" id="fiber" name="fiber" required>
+                    <input type="number" step="0.01" id="fiber" name="fiber" placeholder="Enter fiber content" required>
                 </div>
                 <div class="form-group">
                     <label for="trans_fats">Trans Fats (g)</label>
-                    <input type="number" step="0.01" id="trans_fats" name="trans_fats" required>
+                    <input type="number" step="0.01" id="trans_fats" name="trans_fats" placeholder="Enter trans fats" required>
                 </div>
                 <div class="form-group">
                     <label for="cholesterol">Cholesterol (mg)</label>
-                    <input type="number" step="0.01" id="cholesterol" name="cholesterol" required>
+                    <input type="number" step="0.01" id="cholesterol" name="cholesterol" placeholder="Enter cholesterol" required>
                 </div>
                 <div class="form-group">
                     <label for="calcium">Calcium (mg)</label>
-                    <input type="number" step="0.01" id="calcium" name="calcium" required>
+                    <input type="number" step="0.01" id="calcium" name="calcium" placeholder="Enter calcium content" required>
                 </div>
                 <div class="form-group">
                     <label for="iron">Iron (mg)</label>
-                    <input type="number" step="0.01" id="iron" name="iron" required>
+                    <input type="number" step="0.01" id="iron" name="iron" placeholder="Enter iron content" required>
                 </div>
                 <div class="form-group">
                     <label for="sodium">Sodium (mg)</label>
-                    <input type="number" step="0.01" id="sodium" name="sodium" required>
+                    <input type="number" step="0.01" id="sodium" name="sodium" placeholder="Enter sodium content" required>
+                </div>
+                <div class="form-group">
+                    <label for="food_image">Food Image</label>
+                    <input type="file" id="food_image" name="food_image" accept="image/*">
+                </div>
+                <div class="form-group button-group">
+                    <label>&nbsp;</label>
+                    <button type="submit">Add Food</button>
                 </div>
             </div>
-            <button type="submit">Add Food</button>
         </form>
 
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
+                        <th>Image</th>
                         <th>Name</th>
                         <th>Serving Size</th>
                         <th>Calories</th>
@@ -108,6 +116,11 @@
                 const food = foods[key];
                 const row = document.createElement("tr");
                 row.innerHTML = `
+                    <td>
+                        ${food.image ? 
+                            `<img src="/uploads/${food.image}" alt="${food.name}" style="width: 50px; height: 50px; object-fit: cover;">` 
+                            : 'No image'}
+                    </td>
                     <td>${food.name}</td>
                     <td>${food.serving_size || ""}</td>
                     <td>${food.calories}</td>
@@ -130,16 +143,24 @@
 
         async function addFood(event) {
             event.preventDefault();
-            const formData = new FormData(event.target);
-            const foodData = Object.fromEntries(formData.entries());
+            try {
+                const formData = new FormData(event.target);
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    body: formData
+                });
 
-            await fetch(apiUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(foodData)
-            });
-            document.getElementById("addFoodForm").reset();
-            loadFoods();
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to add food');
+                }
+
+                document.getElementById("addFoodForm").reset();
+                await loadFoods();
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message);
+            }
         }
 
         async function deleteFood(name) {
